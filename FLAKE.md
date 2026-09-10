@@ -1,24 +1,27 @@
 # Ableton Live Nix Flake
 
-In addition to the usual installer, this project is packaged as a nix flake, both to support NixOS, where the installer does not work, as well as any other Linux system using Nix.
+This project contains a nix flake; both to support common NixOS configurations, as well as any other Linux system using Nix.
 
-NixOS is only supported via the flake, as NixOS does not allow dynamic library linking, so the standard installer will fail.
+Since NixOS does not allow dynamic library linking out of the box, the standard installer will fail.
 
-Please read through this whole document before using the flake, as there are many otions available.
+Please read through this whole document before using the flake, as there are many options available.
 
 ## Installation
 
 *Flakes are experimental and must be [enabled](https://wiki.nixos.org/wiki/Flakes#Setup).*
 
-The flake builds and patches wine, this can take considerable time. Running any of the flakes will build wine, so to install, use `.#setup-prefix` to also setup the wine prefix.
+First, set up the wine prefix. This builds and patches wine: 
 
 ```
 nix run github:shibco/ableton-linux#setup-prefix
 ```
 
+Note that this can take a considerable amount of time; you can mitigate this by maintaining a build without frequent updates. More info is detailed in the **"Pinning Solutions"** section. 
+
+
 ### Installing Live
 
-Once the prefix is setup, you will be prompted to install Ableton Live. You can copy the command displayed, adding the path to your Ableton Live installer exe. You can also use the `.#wine` flake, which sets the wine prefix and uses the patched wine binary.
+Once the prefix is setup, you will be prompted to install Ableton Live. You can copy the command displayed, adding the path to your Ableton Live installer exe. You can also use the `.#wine` option, which sets the wine prefix and uses the patched wine binary.
 
 ```
 nix run github:shibco/ableton-linux#wine /path/to/ableton-live-installer.exe
@@ -60,7 +63,7 @@ nix run github:shibco/ableton-linux
 
 If the system package is installed, you can run it with `ableton-live` or through a program launcher using the .desktop file.
 
-## Alternative Flake References
+## Pinning Solutions 
 
 Although `github:shibco/ableton-linux` is a convenient flake location, running live with `nix run github:shibco/ableton-linux` will result in redownloading and rebuilding wine everytime there is a new commit to `main` in the github repo.
 
@@ -88,9 +91,9 @@ There is no dedicated uninstaller. If using `nix run`, clearing your nix store c
 
 Dangling directories at `~/.local/share/ableton-wine` (contains a symlink), and `~/.local/state/ableton-wine` (contains logs) can be removed. For a complete uninstalltion, you can also delete the prefix at `~/.wine-ableton`, but note that will delete Ableton Live and anything else installed in the prefix.
 
-## Additional Flakes
+## Additional Options
 
-You can also view all flakes in [flake.nix](flake.nix).
+You can also view all the possible flake options in [flake.nix](flake.nix).
 
 ### Default
 
