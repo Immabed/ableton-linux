@@ -16,7 +16,7 @@ First, set up the wine prefix. This builds and patches wine:
 nix run github:shibco/ableton-linux#setup-prefix
 ```
 
-Note that this can take a considerable amount of time; you can mitigate this by maintaining a build without frequent updates. More info is detailed in the **"Pinning Solutions"** section. 
+Note that this can take a considerable amount of time; you can mitigate this by maintaining a build without frequent updates. More info is detailed [here](#pinning-solutions).
 
 
 ### Installing Live
@@ -39,27 +39,23 @@ Or with your Live installer in another directory run:
 nix run github:shibco/ableton-linux#setup-prefix --set-env-var ABLETON_LIVE_AUTOINSTALL 1 --set-env-var LIVE_AUTOINSTALL_DIR /path/to/dir
 ```
 
-### Flake Input for System Config
+### Adding the Flake to your System Config
 
 You can use the default flake as a flake input and add it to your system config. You still need to run `.#setup-prefix` manually one time to create the prefix.
 
 With the flake provided as an input, you can add ableton-linux to your system packages (where `inputs.ableton-linux` is the flake input)
 
 ```
-inputs.ableton-linux.packages.x86_64-linux.default
+inputs.ableton-linux.packages.${pkgs.stdenv.hostPlatform.system}.default
 ```
 
 This will add an `ableton-live` command, as well as a .desktop file, for launching Live. This also adds the `ableton-wine` command, which is a shortcut for setting the wine prefix to `~/.wine-ableton` and running the patched wine, the same as `nix run .#wine`.
 
-### Basic Example
-
-A basic example of installing this way is provided [here](#basic-system-flake-setup).
-
-This is an example installation as a flake input, with the system package. There are many other ways to do this. 
+#### Basic Example
 
 This example uses the basic flake on the [NixOS Wiki](https://wiki.nixos.org/wiki/NixOS_system_configuration#Accessing_flake_inputs), and allows the continued use of an already setup `configuration.nix`.
 
-`/etc/flake.nix`
+in your `flake.nix`:
 ```nix
 {
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -81,15 +77,12 @@ Then in your `configuration.nix` add `inputs` to the arguments:
 ```
 
 Then add to your system packages:
+
 ```
 environment.systemPackages = with pkgs; [
-  ...
-]
-++ [
-  inputs.ableton-linux.packages.x86_64-linux.default
+  inputs.ableton-linux.packages.${pkgs.stdenv.hostPlatform.system}.default
 ];
 ```
-
 
 ## Running Live
 
