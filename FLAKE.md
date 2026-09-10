@@ -10,13 +10,7 @@ Please read through this whole document before using the flake, as there are man
 
 *Flakes are experimental and must be [enabled](https://wiki.nixos.org/wiki/Flakes#Setup).*
 
-The flake builds and patches wine, this can take considerable time.
-
-```
-nix run github:shibco/ableton-linux
-```
-
-Before Ableton Live can be run, the wine prefix must also be setup. Unlike the standard installer, this requires an extra step.
+The flake builds and patches wine, this can take considerable time. Running any of the flakes will build wine, so to install, use `.#setup-prefix` to also setup the wine prefix.
 
 ```
 nix run github:shibco/ableton-linux#setup-prefix
@@ -36,15 +30,15 @@ You can also choose to auto-install Live while setting up the prefix. With a val
 nix run github:shibco/ableton-linux#setup-prefix --set-env-var ABLETON_LIVE_AUTOINSTALL 1
 ```
 
-Or with your Live installer in another directoy run:
+Or with your Live installer in another directory run:
 
 ```
 nix run github:shibco/ableton-linux#setup-prefix --set-env-var ABLETON_LIVE_AUTOINSTALL 1 --set-env-var LIVE_AUTOINSTALL_DIR /path/to/dir
 ```
 
-### System Install as a Flake Input
+### Flake Input for System Config
 
-You can use the default flake as a flake input. You still need to run `.#setup-prefix` manually.
+You can use the default flake as a flake input. You still need to run `.#setup-prefix` manually one time to create the prefix.
 
 With the flake provided as an input, you can add ableton-linux to your system packages (where `inputs.ableton-linux` is the flake input)
 
@@ -64,11 +58,11 @@ With the prefix setup and Live installed, you can run it with the default flake.
 nix run github:shibco/ableton-linux
 ```
 
-If the system package is installed, you can run it with `ableton-live` or through a program launcher with the .desktop file.
+If the system package is installed, you can run it with `ableton-live` or through a program launcher using the .desktop file.
 
 ## Alternative Flake References
 
-Although `github:shibco/ableton-linux` is a great flake location, running live with `nix run github:shibco/ableton-linux` will result in redownloading and rebuilding wine everytime there is a new commit to `main` in the github repo.
+Although `github:shibco/ableton-linux` is a convenient flake location, running live with `nix run github:shibco/ableton-linux` will result in redownloading and rebuilding wine everytime there is a new commit to `main` in the github repo.
 
 There are [several other ways](https://nix.dev/manual/nix/2.34/command-ref/new-cli/nix3-flake.html#flake-references) to reference the flake. In each case, replace `github:shibco/ableton-linux` with the alternative reference.
 
@@ -76,9 +70,9 @@ To pin a specific commit, either to avoid updating, or to test a particular vers
 
 To follow a specific branch, add the branch name, eg. `github:shibco/ableton-linux/main`.
 
-To use a local copy of the repo, download the repo and use the path to the local repo. `/path/to/flake/dir` or for relative path, `./relative/path/flake/dir`. Most sinply, use `.` for the current dir.
+To use a local copy of the repo, download the repo and use the path to the local repo: `/path/to/flake/dir`, or for a relative path: `./relative/path/flake/dir`. Most simply, use just `.` if the repo is the current directory.
 
-## Updating ableton-linux
+## Updating
 
 Updating is a two-part process. If you are using `nix run`, the default flake will automatically rebuild when the flake reference has updated. If used as a flake input, use `nix flake update`.
 
@@ -87,6 +81,12 @@ After an update, it is recommended to run
 nix run github:shibco/ableton-linux#setup-prefix -- --refresh
 ```
 to apply any changes to the wine prefix. This is an idempotent command, and can be run anytime and repeatedly, even without `-- --refresh`, which just skips steps not needed for an existing prefix.
+
+## Uninstalling
+
+There is no dedicated uninstaller. If using `nix run`, clearing your nix store cache will remove build artifacts. If using flake inputs, simply remove the flake from your config.
+
+Dangling directories at `~/.local/share/ableton-wine` (contains a symlink), and `~/.local/state/ableton-wine` (contains logs) can be removed. For a complete uninstalltion, you can also delete the prefix at `~/.wine-ableton`, but note that will delete Ableton Live and anything else installed in the prefix.
 
 ## Additional Flakes
 
