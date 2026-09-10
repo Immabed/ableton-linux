@@ -51,7 +51,45 @@ inputs.ableton-linux.packages.x86_64-linux.default
 
 This will add an `ableton-live` command, as well as a .desktop file, for launching Live. This also adds the `ableton-wine` command, which is a shortcut for setting the wine prefix to `~/.wine-ableton` and running the patched wine, the same as `nix run .#wine`.
 
+### Basic Example
+
 A basic example of installing this way is provided [here](#basic-system-flake-setup).
+
+This is an example installation as a flake input, with the system package. There are many other ways to do this. 
+
+This example uses the basic flake on the [NixOS Wiki](https://wiki.nixos.org/wiki/NixOS_system_configuration#Accessing_flake_inputs), and allows the continued use of an already setup `configuration.nix`.
+
+`/etc/flake.nix`
+```nix
+{
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+  inputs.ableton-linux.url = "github:shibco/ableton-linux";
+
+  outputs = { self, nixpkgs, ... }@inputs: {
+    # replace nixos with your hostname
+    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+      specialArgs = { inherit inputs; };
+      modules = [ ./configuration.nix ];
+    };
+  };
+}
+```
+
+Then in your `configuration.nix` add `inputs` to the arguments:
+```
+{ config, pkgs, inputs, ... }:
+```
+
+Then add to your system packages:
+```
+environment.systemPackages = with pkgs; [
+  ...
+]
+++ [
+  inputs.ableton-linux.packages.x86_64-linux.default
+];
+```
+
 
 ## Running Live
 
@@ -128,39 +166,3 @@ Commands include `enable`, `disable`, and `status`, eg `nix run .#setup-link sta
 
 ## Basic System Flake Setup
 
-This is an example installation as a flake input, with the system package. There are many other ways to do this. 
-
-This example uses the basic flake on the [NixOS Wiki](https://wiki.nixos.org/wiki/NixOS_system_configuration#Accessing_flake_inputs), and allows the continued use of an already setup `configuration.nix`.
-
-`/etc/flake.nix`
-```nix
-{
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-  inputs.ableton-linux.url = "github:shibco/ableton-linux";
-
-  outputs = { self, nixpkgs, ... }@inputs: {
-    # replace nixos with your hostname
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-      specialArgs = { inherit inputs; };
-      modules = [ ./configuration.nix ];
-    };
-  };
-}
-```
-
-Then in your `configuration.nix` add `inputs` to the arguments, eg:
-```
-{ config, pkgs, inputs, ... }:
-```
-
-Then add to your system packages, eg:
-```
-environment.systemPackages = with pkgs; [
-  ...
-]
-++ [
-  inputs.ableton-linux.packages.x86_64-linux.default
-];
-```
-
-This is only an example setup, and must be modified to match your configuration.
