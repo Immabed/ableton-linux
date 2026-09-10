@@ -41,7 +41,7 @@ nix run github:shibco/ableton-linux#setup-prefix --set-env-var ABLETON_LIVE_AUTO
 
 ### Flake Input for System Config
 
-You can use the default flake as a flake input. You still need to run `.#setup-prefix` manually one time to create the prefix.
+You can use the default flake as a flake input and add it to your system config. You still need to run `.#setup-prefix` manually one time to create the prefix.
 
 With the flake provided as an input, you can add ableton-linux to your system packages (where `inputs.ableton-linux` is the flake input)
 
@@ -163,6 +163,3 @@ If the system package is installed, `ableton-wine` does the same thing, eg. `abl
 Commands include `enable`, `disable`, and `status`, eg `nix run .#setup-link status`.
 
 `enable` also supports setting the mode to `session` or `always`, eg `nix run .#setup-link enable -- --mode=session`
-
-## Basic System Flake Setup
-
