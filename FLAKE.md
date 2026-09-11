@@ -21,7 +21,7 @@ Note that building wine can take a considerable amount of time; you can mitigate
 
 ### Installing Live
 
-Once the prefix is setup, you will be prompted to install Ableton Live. You can copy the command displayed, adding the path to your Ableton Live installer exe. You can also use the `.#wine` option, which sets the wine prefix and uses the patched wine binary.
+Once the prefix is setup, you will be prompted to install Ableton Live. You can copy the command displayed, adding the path to your Ableton Live installer exe. You can also use the `#wine` option, which sets the wine prefix and uses the patched wine binary.
 
 ```
 nix run github:shibco/ableton-linux#wine /path/to/ableton-live-installer.exe
@@ -41,7 +41,7 @@ nix run github:shibco/ableton-linux#setup-prefix --set-env-var ABLETON_LIVE_AUTO
 
 ### Adding the Flake to your System Config
 
-You can use the default flake as a flake input and add it to your system config. You still need to run `.#setup-prefix` manually one time to create the prefix.
+You can use the default flake as a flake input and add it to your system config. You still need to run `#setup-prefix` manually one time to create the prefix.
 
 With the flake provided as an input, you can add ableton-linux to your system packages (where `inputs.ableton-linux` is the flake input)
 
@@ -49,7 +49,7 @@ With the flake provided as an input, you can add ableton-linux to your system pa
 inputs.ableton-linux.packages.${pkgs.stdenv.hostPlatform.system}.default
 ```
 
-This will add the `ableton-live` command and an Ableton Live desktop entry, both for launching Live. This also adds the `ableton-wine` command, which is a shortcut for setting the wine prefix to `~/.wine-ableton` and running the patched wine, the same as `nix run .#wine`.
+This will add the `ableton-live` command and an Ableton Live desktop entry, both for launching Live. This also adds the `ableton-wine` command, which is a shortcut for setting the wine prefix to `~/.wine-ableton` and running the patched wine, the same as `nix run github:shibco/ableton-linux#wine`.
 
 #### Basic Example
 
@@ -110,7 +110,7 @@ To use a local copy, clone the repository and use the path to the local repo: ei
 
 If you are using `nix run`, the flake will automatically rebuild when the flake reference has updated. If used as a flake input, use `nix flake update`.
 
-After an update, or to cause an update, it is recommended to run `.#setup-prefix` with the `--refresh` flag.
+After an update, or to cause an update, it is recommended to run `#setup-prefix` with the `--refresh` flag.
 ```
 nix run github:shibco/ableton-linux#setup-prefix -- --refresh
 ```
@@ -128,31 +128,31 @@ You can also view all the possible flake options in [flake.nix](flake.nix).
 
 ### Default
 
-`.` - runs Live with the patched wine.
+Runs Live with the patched wine.
 
 ### Wine
 
-`.#wine` - runs the patched wine runtime in the `.wine-ableton` prefix. Use this for installing plugins, eg. `nix run github:shibco/ableton-linux#wine plugin-installer.exe`
+`#wine` - runs the patched wine runtime in the `.wine-ableton` prefix. Use this for installing plugins, eg. `nix run github:shibco/ableton-linux#wine plugin-installer.exe`
 
 If the system package is installed, `ableton-wine` does the same thing, eg. `ableton-wine plugin-installer.exe`.
 
 ### Setup Prefix
 
-`.#setup-prefix` - creates and prepares the wine prefix. Updates existing prefix. Can be run with `-- --refresh` to update the prefix.
+`#setup-prefix` - creates and prepares the wine prefix. Updates existing prefix. Can be run with `-- --refresh` to update the prefix.
 
 ### Check NTSync
 
-`.#check-ntsync` - runs the `check-ntsync.sh` script to check if the NTSync kernel module is enabled and working. 
+`#check-ntsync` - runs the `check-ntsync.sh` script to check if the NTSync kernel module is enabled and working. 
 
 ### Audio Report
-`.#audio-report` - runs the `audio-report.sh` script, for troubleshooting audio issues. Prints the read-only audio diagnostic snapshot an issue report is expected to carry.
+`#audio-report` - runs the `audio-report.sh` script, for troubleshooting audio issues. Prints the read-only audio diagnostic snapshot an issue report is expected to carry.
 
 ### Setup Realtime
-`.#setup-realtime` - Install the distribution-canon pro-audio profile (rtprio, swappiness, governor, asks for sudo)
+`#setup-realtime` - Install the distribution-canon pro-audio profile (rtprio, swappiness, governor, asks for sudo)
 
 ### Setup Link
-`.#setup-link` - Set up Ableton Link networking (firewall port 20808) and enable the ableton-linkd user service
+`#setup-link` - Set up Ableton Link networking (firewall port 20808) and enable the ableton-linkd user service
 
-Commands include `enable`, `disable`, and `status`, eg `nix run .#setup-link status`.
+Commands include `enable`, `disable`, and `status`, eg `nix run github:shibco/ableton-linux#setup-link status`.
 
-`enable` also supports setting the mode to `session` or `always`, eg `nix run .#setup-link enable -- --mode=session`
+`enable` also supports setting the mode to `session` or `always`, eg `nix run github:shibco/ableton-linux#setup-link enable -- --mode=session`
