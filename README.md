@@ -290,7 +290,7 @@ There are two ways to install Windows plugins:
 You can also use the command in step 2 to run patches, software updaters, and
 copy-protection tools.
 
-If your are using the nix flake, use the procedure [detailed here](FLAKE.md#wine) instead.
+If you are using the nix flake, use the procedure [detailed here](FLAKE.md#wine) instead.
 
 ### If you have a VST3 file
 

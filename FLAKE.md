@@ -21,7 +21,7 @@ Note that building wine can take a considerable amount of time; you can mitigate
 
 ### Installing Live
 
-Once the prefix is setup, you will be prompted to install Ableton Live. You can copy the command displayed, adding the path to your Ableton Live installer exe. You can also use the `#wine` option, which sets the wine prefix and uses the patched wine binary.
+Once the prefix is set up, you will be prompted to install Ableton Live. You can copy the command displayed, adding the path to your Ableton Live installer exe. You can also use the `#wine` option, which sets the wine prefix and uses the patched wine binary.
 
 ```
 nix run github:shibco/ableton-linux#wine /path/to/ableton-live-installer.exe
@@ -96,7 +96,7 @@ If the system package is installed, you can run it with `ableton-live` or throug
 
 ## Pinning Solutions 
 
-Although `github:shibco/ableton-linux` is a convenient flake location, running live with `nix run github:shibco/ableton-linux` will result in downloading the commit tarball (>100MB) for every new commit to `main` in the github repo, and rebuilding wine any time there is a change to the wine version or patches.
+Although `github:shibco/ableton-linux` is a convenient flake location, running Live with `nix run github:shibco/ableton-linux` will result in downloading the commit tarball (>100MB) for every new commit to `main` in the github repo, and rebuilding wine any time there is a change to the wine version or patches.
 
 There are [several other ways](https://nix.dev/manual/nix/2.34/command-ref/new-cli/nix3-flake.html#flake-references) to reference the flake. In each case, replace `github:shibco/ableton-linux` with the alternative reference in any commands or config files.
 
